@@ -58,7 +58,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyBjPGN-vROuy1eXdWJNU1Kv6FTQ8pVpoXs',
-    appId: '1:864939742386:android:c74abcec842519209ca5ab',
+    appId: '1:864939742386:android:a2fbc4a9ad34cdb79ca5ab',
     messagingSenderId: '864939742386',
     projectId: 'recipe-flutter-app-3008e',
     storageBucket: 'recipe-flutter-app-3008e.appspot.com',
@@ -66,11 +66,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyBuTwpV0bh50zZ63GOL4Mljom2NajLHuYY',
-    appId: '1:864939742386:ios:00864c10fd1e114e9ca5ab',
+    appId: '1:864939742386:ios:bd42ea203d5c57079ca5ab',
     messagingSenderId: '864939742386',
     projectId: 'recipe-flutter-app-3008e',
     storageBucket: 'recipe-flutter-app-3008e.appspot.com',
-    iosBundleId: 'com.example.rachnaMessManagementSystem',
+    iosBundleId: 'com.example.messManagementSystem',
   );
 
 }

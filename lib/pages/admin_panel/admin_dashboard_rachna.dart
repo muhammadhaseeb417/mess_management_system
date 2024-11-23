@@ -128,6 +128,8 @@ class _AdminDashboardRachnaState extends State<AdminDashboardRachna> {
   }
 
   Widget _addRecipeForm(BuildContext context) {
+    bool isSubmittingInfo = false;
+
     return Form(
       key: _messRecipeKey,
       child: Column(
