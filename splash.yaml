@@ -1,0 +1,14 @@
+flutter_native_splash:
+  color: "#5271ff"
+  color_dark: "#22201c"
+  image: assets/logos/rachna_mms_logo_light.png
+  image_dark: assets/logos/rachna_mms_logo_dark.png
+
+  android_12:
+    color: "#5271ff"
+    color_dark: "#22201c"
+    image: assets/logos/rachna_mms_logo_light.png
+    image_dark: assets/logos/rachna_mms_logo_dark.png
+
+
+  web: false
