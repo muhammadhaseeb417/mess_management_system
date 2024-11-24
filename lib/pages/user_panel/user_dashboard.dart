@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:lottie/lottie.dart';
+import 'package:mess_management_system/pages/Full%20Schedule/full_schedule.dart';
 
 import '../../models/mess_recipesAndtiming.dart';
 import '../../services/database_service.dart';
@@ -190,9 +191,15 @@ class _UserDashboardState extends State<UserDashboard> {
                   bottom: 0,
                   right: 0,
                   child: Padding(
-                    padding: const EdgeInsets.all(3.0),
+                    padding: EdgeInsets.all(3.0),
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (context) {
+                            return const FullSchedule();
+                          },
+                        ));
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: TColors.black,
                         side: const BorderSide(color: TColors.black),
@@ -290,7 +297,6 @@ class _UserDashboardState extends State<UserDashboard> {
                 }
               },
             ),
-            ElevatedButton(onPressed: () async {}, child: const Text('Click'))
           ],
         ),
       ),

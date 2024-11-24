@@ -27,6 +27,8 @@ class _AdminDashboardRachnaState extends State<AdminDashboardRachna> {
   late MediaService _mediaService;
   late StorageServive _storageServive;
 
+  bool isSubmittingInfo = false;
+
   File? selectedImage = null;
 
   List<String> daysOfMess = [
@@ -62,18 +64,22 @@ class _AdminDashboardRachnaState extends State<AdminDashboardRachna> {
       appBar: AppBar(
         title: const Text('Admin Dashboard'),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(TSizes.defaultSpace),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _addRecipePicture(context),
-              _addRecipeForm(context),
-            ],
-          ),
-        ),
-      ),
+      body: isSubmittingInfo
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(TSizes.defaultSpace),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _addRecipePicture(context),
+                    _addRecipeForm(context),
+                  ],
+                ),
+              ),
+            ),
     );
   }
 
@@ -128,8 +134,6 @@ class _AdminDashboardRachnaState extends State<AdminDashboardRachna> {
   }
 
   Widget _addRecipeForm(BuildContext context) {
-    bool isSubmittingInfo = false;
-
     return Form(
       key: _messRecipeKey,
       child: Column(
@@ -155,6 +159,9 @@ class _AdminDashboardRachnaState extends State<AdminDashboardRachna> {
             width: double.maxFinite,
             child: ElevatedButton(
               onPressed: () async {
+                setState(() {
+                  isSubmittingInfo = true;
+                });
                 if (_messRecipeKey.currentState?.validate() ?? false) {
                   _messRecipeKey.currentState?.save();
 
@@ -170,22 +177,11 @@ class _AdminDashboardRachnaState extends State<AdminDashboardRachna> {
                       recipeId: "", // This field is updated in Firebase
                     ),
                   );
-                  print("Pass the createMessRecipeInFirebase");
-                  print(recipeId);
 
-                  // Check if an image is selected before uploading
                   if (selectedImage != null) {
-                    // await ImageUploadService.uploadRecipeImage(
-                    //   recipeId, // Pass the captured recipe ID
-                    //   selectedImage!,
-                    //   "recipe-image",
-                    // );
-
                     await _storageServive.uploadRecipeImage(
                         file: selectedImage!, uid: recipeId);
-                    print("inside the selectedimage");
                   }
-                  print("outside the selectedimage");
                   Get.rawSnackbar(
                     duration: Duration(seconds: 3),
                     icon: Icon(Icons.info_outline),
@@ -198,6 +194,9 @@ class _AdminDashboardRachnaState extends State<AdminDashboardRachna> {
 
                   setState(() {});
                 }
+                setState(() {
+                  isSubmittingInfo = false;
+                });
               },
               child: const Text('Submit'),
             ),

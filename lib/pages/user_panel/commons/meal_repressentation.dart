@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:mess_management_system/services/storage_servive.dart';
 import 'dart:async';
 
 import '../../../models/mess_recipesAndtiming.dart';
@@ -18,6 +20,9 @@ class MealRepressentation extends StatefulWidget {
 class _MealRepresentationState extends State<MealRepressentation> {
   Timer? _timer;
   String _timeUntilMeal = '';
+  final GetIt _getIt = GetIt.instance;
+  late StorageServive _storageServive;
+  String? upcomingMealRecipeImgUrl;
 
   @override
   void initState() {
@@ -26,12 +31,20 @@ class _MealRepresentationState extends State<MealRepressentation> {
     _timer = Timer.periodic(const Duration(seconds: 30), (timer) {
       _updateTimeUntilMeal();
     });
+    _storageServive = _getIt.get<StorageServive>();
+    getUpcomingMealRecipeImgUrl();
   }
 
   @override
   void dispose() {
     _timer?.cancel();
     super.dispose();
+  }
+
+  void getUpcomingMealRecipeImgUrl() async {
+    upcomingMealRecipeImgUrl = await _storageServive.getRecipeImageUrl(
+        uid: widget.upcomingRecipe!.recipeId);
+    print("Fetched Image URL: $upcomingMealRecipeImgUrl");
   }
 
   void _updateTimeUntilMeal() {
@@ -114,8 +127,10 @@ class _MealRepresentationState extends State<MealRepressentation> {
         borderRadius: BorderRadius.circular(
           TSizes.buttonRadius,
         ),
-        image: const DecorationImage(
-          image: AssetImage("assets/images/food/biryani.jpg"),
+        image: DecorationImage(
+          image: upcomingMealRecipeImgUrl != null
+              ? NetworkImage(upcomingMealRecipeImgUrl!)
+              : AssetImage("assets/images/food/biryani.jpg"),
           fit: BoxFit.cover,
         ),
       ),

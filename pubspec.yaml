@@ -48,6 +48,7 @@ dependencies:
   connectivity_plus:
   dotted_border:
   flutter_native_splash: ^2.4.2
+  provider: ^6.1.2
 
 
 

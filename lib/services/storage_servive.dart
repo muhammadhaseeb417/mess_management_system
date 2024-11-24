@@ -14,7 +14,7 @@ class StorageServive {
   }) async {
     try {
       Reference recipeRef = _firebasestorage
-          .ref("/users/pfp")
+          .ref("/mess_recipes/images")
           .child("$uid${p.extension(file.path)}");
 
       UploadTask TASK = recipeRef.putFile(File(file.path));
@@ -26,6 +26,31 @@ class StorageServive {
       return downloadURL;
     } catch (e) {
       print(e);
+      return null;
+    }
+  }
+
+  Future<String?> getRecipeImageUrl({String? uid}) async {
+    try {
+      // Reference to the folder containing the images
+      Reference folderRef = _firebasestorage.ref("/mess_recipes/images");
+
+      // List all files in the folder
+      ListResult result = await folderRef.listAll();
+
+      // Find the first file that matches the uid
+      for (Reference ref in result.items) {
+        if (ref.name.startsWith(uid!)) {
+          // Fetch and return the download URL
+          return await ref.getDownloadURL();
+        }
+      }
+
+      // If no matching file is found
+      print("No file found with uid: $uid");
+      return null;
+    } catch (e) {
+      print("Error fetching URL: $e");
       return null;
     }
   }
