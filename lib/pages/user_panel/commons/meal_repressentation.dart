@@ -137,17 +137,30 @@ class _MealRepresentationState extends State<MealRepressentation> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            widget.upcomingRecipe!.recipeName,
-            style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-              shadows: [
-                Shadow(
-                  color: Colors.black.withOpacity(0.5),
-                  offset: const Offset(5.0, 2.0),
-                  blurRadius: 4.0,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                widget.upcomingRecipe!.recipeName,
+                style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                  shadows: [
+                    Shadow(
+                      color: Colors.black.withOpacity(0.5),
+                      offset: const Offset(5.0, 2.0),
+                      blurRadius: 4.0,
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  color: TColors.primary,
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                child: Text(widget.upcomingRecipe!.messTime),
+              ),
+            ],
           ),
           const SizedBox(
             height: TSizes.lg,

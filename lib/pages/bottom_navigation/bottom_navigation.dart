@@ -22,13 +22,12 @@ class BottomNavigation extends StatelessWidget {
               NavigationDestination(icon: Icon(Icons.home), label: "Home"),
               NavigationDestination(
                   icon: Icon(Icons.admin_panel_settings_outlined),
-                  label: "Admin")
+                  label: "Admin"),
+              NavigationDestination(
+                  icon: Icon(Icons.schedule_outlined), label: "Set schedule"),
             ],
           ),
-          body: IndexedStack(
-            index: state.index,
-            children: state.screens,
-          ),
+          body: state.screens[state.index],
         );
       },
     );
