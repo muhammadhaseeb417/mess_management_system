@@ -142,6 +142,7 @@ class _AdminDashboardRachnaState extends State<AdminDashboardRachna> {
             hintText: "Recipe Name",
             prefixIcon: Icon(Icons.food_bank_outlined),
             onSaved: (value) => recipeName = value,
+            validateRegExp: null,
           ),
           const SizedBox(
             height: TSizes.spaceBtwItems,

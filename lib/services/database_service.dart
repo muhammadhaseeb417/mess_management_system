@@ -1,23 +1,46 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../models/mess_recipesAndtiming.dart';
+import '../pages/authentication/models/user_model.dart';
 
 class DatabaseService {
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
 
   late final CollectionReference<MessRecipes> _messRecipes;
+  late final CollectionReference<UserModel> _userModel;
 
   DatabaseService() {
+    _setupFirebaseRecipeReference();
     _setupFirebaseUserReference();
   }
 
-  void _setupFirebaseUserReference() {
+  void _setupFirebaseRecipeReference() {
     _messRecipes = _firebaseFirestore
         .collection("mess_recipes")
         .withConverter<MessRecipes>(
           fromFirestore: (snapshot, _) => MessRecipes.fromMap(snapshot.data()!),
           toFirestore: (messRecipes, _) => messRecipes.toMap(),
         );
+  }
+
+  void _setupFirebaseUserReference() {
+    _userModel = _firebaseFirestore
+        .collection("uet_students")
+        .withConverter<UserModel>(
+          fromFirestore: (snapshot, _) => UserModel.fromMap(snapshot.data()!),
+          toFirestore: (userModel, _) => userModel.toMap(),
+        );
+  }
+
+  Future<void> createUserInFirebase({
+    required UserModel user,
+  }) async {
+    try {
+      await _userModel!.doc(user.uid).set(user);
+    } catch (e) {
+      print("Error creating recipe: $e");
+      rethrow; // Throw the error for better debugging
+    }
   }
 
   Future<String> createMessRecipeInFirebase({

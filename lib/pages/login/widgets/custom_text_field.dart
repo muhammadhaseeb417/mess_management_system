@@ -6,6 +6,7 @@ class CustomTextField extends StatelessWidget {
   final Icon? surfixIcon;
   final bool obsureText;
   final Function(String?)? onSaved;
+  final RegExp? validateRegExp;
 
   const CustomTextField({
     super.key,
@@ -14,12 +15,22 @@ class CustomTextField extends StatelessWidget {
     this.surfixIcon,
     this.obsureText = false,
     this.onSaved,
+    this.validateRegExp,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       onSaved: onSaved,
+      validator: (value) {
+        if (validateRegExp != null &&
+            value != null &&
+            validateRegExp!.hasMatch(value)) {
+          return null;
+        } else {
+          return "Please enter a valid ${hintText}";
+        }
+      },
       obscureText: obsureText,
       decoration: InputDecoration(
         prefixIcon: prefixIcon,

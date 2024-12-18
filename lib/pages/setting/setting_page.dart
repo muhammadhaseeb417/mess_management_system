@@ -9,6 +9,15 @@ class SettingPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Setting'),
       ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              child: Text("Home"),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

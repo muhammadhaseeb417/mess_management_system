@@ -158,7 +158,7 @@ class _MealRepresentationState extends State<MealRepressentation> {
                   borderRadius: BorderRadius.circular(5),
                 ),
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                child: Text(widget.upcomingRecipe!.messTime),
+                child: Text(widget.upcomingRecipe!.messTime.split(' ')[0]),
               ),
             ],
           ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mess_management_system/utils/constants/reg_exp.dart';
 
 import '../../utils/constants/image_strings.dart';
 import '../../utils/constants/sizes.dart';
@@ -77,18 +78,20 @@ class _LoginPageState extends State<LoginPage> {
     return Form(
       child: Column(
         children: [
-          const CustomTextField(
+          CustomTextField(
             hintText: "E-Mail",
             prefixIcon: Icon(Icons.email),
+            validateRegExp: EMAIL_VALIDATION_REGEX,
           ),
           const SizedBox(
             height: TSizes.lg,
           ),
-          const CustomTextField(
+          CustomTextField(
             hintText: "Password",
             prefixIcon: Icon(Icons.password),
             surfixIcon: Icon(Icons.remove_red_eye),
             obsureText: true,
+            validateRegExp: PASSWORD_VALIDATION_REGEX,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

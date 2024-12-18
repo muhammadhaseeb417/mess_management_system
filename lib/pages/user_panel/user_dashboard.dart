@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mess_management_system/pages/Full%20Schedule/full_schedule.dart';
+import 'package:mess_management_system/pages/bill/bill_screen.dart';
+import 'package:mess_management_system/pages/current%20bill/current_bill_screen.dart';
+import 'package:mess_management_system/pages/view%20attendence/view_attendence_screen.dart';
+import 'package:mess_management_system/pages/view%20cut%20attendence/view_cut_attendence.dart';
 
 import '../../models/mess_recipesAndtiming.dart';
 import '../../services/database_service.dart';
@@ -304,13 +308,16 @@ class _UserDashboardState extends State<UserDashboard> {
   }
 
   Widget _infobuttons(BuildContext context) {
-    return const Column(
+    return Column(
       children: [
         Row(
           children: [
             Expanded(
               child: CustomInfoButton(
-                  btnText: "View Current Bill", backgroundColor: Colors.green),
+                btnText: "View Current Bill",
+                backgroundColor: Colors.green,
+                pageCallback: () => CurrentBillScreen(),
+              ),
             ),
             SizedBox(
               width: TSizes.lg,
@@ -319,6 +326,7 @@ class _UserDashboardState extends State<UserDashboard> {
               child: CustomInfoButton(
                 btnText: "View Attendence",
                 backgroundColor: Color.fromARGB(255, 164, 148, 11),
+                pageCallback: () => ViewAttendenceScreen(),
               ),
             ),
           ],
@@ -330,7 +338,10 @@ class _UserDashboardState extends State<UserDashboard> {
           children: [
             Expanded(
               child: CustomInfoButton(
-                  btnText: "Bills", backgroundColor: Colors.blue),
+                btnText: "Bills",
+                backgroundColor: Colors.blue,
+                pageCallback: () => BillScreen(),
+              ),
             ),
             SizedBox(
               width: TSizes.lg,
@@ -339,6 +350,7 @@ class _UserDashboardState extends State<UserDashboard> {
               child: CustomInfoButton(
                 btnText: "View Cut Attendence",
                 backgroundColor: Colors.red,
+                pageCallback: () => ViewCutAttendence(),
               ),
             ),
           ],
