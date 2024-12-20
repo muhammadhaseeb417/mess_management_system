@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:mess_management_system/utils/constants/reg_exp.dart';
 
+import '../../services/auth_service.dart';
 import '../../utils/constants/image_strings.dart';
 import '../../utils/constants/sizes.dart';
 import '../../utils/constants/text_strings.dart';
@@ -18,6 +21,14 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   late bool isDark;
+  final GetIt _getIt = GetIt.instance;
+  late AuthService _authService;
+
+  @override
+  void initState() {
+    super.initState();
+    _authService = _getIt.get<AuthService>();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,13 +86,19 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _loginForm(BuildContext context) {
+    GlobalKey<FormState> _loginKey = GlobalKey<FormState>();
+    String? email, password;
+    bool hidePass = true;
+
     return Form(
+      key: _loginKey,
       child: Column(
         children: [
           CustomTextField(
             hintText: "E-Mail",
             prefixIcon: Icon(Icons.email),
             validateRegExp: EMAIL_VALIDATION_REGEX,
+            onSaved: (p0) => email = p0,
           ),
           const SizedBox(
             height: TSizes.lg,
@@ -89,9 +106,9 @@ class _LoginPageState extends State<LoginPage> {
           CustomTextField(
             hintText: "Password",
             prefixIcon: Icon(Icons.password),
-            surfixIcon: Icon(Icons.remove_red_eye),
             obsureText: true,
             validateRegExp: PASSWORD_VALIDATION_REGEX,
+            onSaved: (p0) => password = p0,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -114,15 +131,43 @@ class _LoginPageState extends State<LoginPage> {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return const BottomNavigation();
-                    },
-                  ),
-                );
+              onPressed: () async {
+                try {
+                  if (email == "admin@admin.com" && password == "Admin@123") {
+                    Navigator.pushReplacementNamed(context, "/admin");
+                  } else {
+                    if (_loginKey.currentState?.validate() ?? false) {
+                      _loginKey.currentState?.save();
+                      bool result = await _authService.login(email!, password!);
+                      if (result) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return const BottomNavigation();
+                            },
+                          ),
+                        );
+                        Get.rawSnackbar(
+                          icon: Icon(Icons.info),
+                          message: "User Successfully Logged In",
+                        );
+                      } else {
+                        Get.rawSnackbar(
+                          icon: Icon(Icons.info),
+                          message: "Please try again.",
+                        );
+                      }
+                    } else {
+                      Get.rawSnackbar(
+                        icon: Icon(Icons.info),
+                        message: "Please try again.",
+                      );
+                    }
+                  }
+                } catch (e) {
+                  print(e);
+                }
               },
               child: const Text(
                 TTexts.logIn,

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
-class CustomTextField extends StatelessWidget {
+class CustomTextField extends StatefulWidget {
   final String hintText;
   final Icon prefixIcon;
-  final Icon? surfixIcon;
   final bool obsureText;
   final Function(String?)? onSaved;
   final RegExp? validateRegExp;
@@ -12,30 +11,53 @@ class CustomTextField extends StatelessWidget {
     super.key,
     required this.hintText,
     required this.prefixIcon,
-    this.surfixIcon,
     this.obsureText = false,
     this.onSaved,
     this.validateRegExp,
   });
 
   @override
+  State<CustomTextField> createState() => _CustomTextFieldState();
+}
+
+class _CustomTextFieldState extends State<CustomTextField> {
+  late bool _obscureText;
+
+  @override
+  void initState() {
+    super.initState();
+    _obscureText = widget.obsureText; // Initialize with the passed value
+  }
+
+  @override
   Widget build(BuildContext context) {
     return TextFormField(
-      onSaved: onSaved,
+      onSaved: widget.onSaved,
       validator: (value) {
-        if (validateRegExp != null &&
+        if (widget.validateRegExp != null &&
             value != null &&
-            validateRegExp!.hasMatch(value)) {
+            widget.validateRegExp!.hasMatch(value)) {
           return null;
         } else {
-          return "Please enter a valid ${hintText}";
+          return "Please enter a valid ${widget.hintText}";
         }
       },
-      obscureText: obsureText,
+      obscureText: _obscureText,
       decoration: InputDecoration(
-        prefixIcon: prefixIcon,
-        suffixIcon: surfixIcon,
-        hintText: hintText,
+        prefixIcon: widget.prefixIcon,
+        suffixIcon: widget.obsureText
+            ? GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _obscureText = !_obscureText;
+                  });
+                },
+                child: Icon(
+                  _obscureText ? Icons.visibility : Icons.visibility_off,
+                ),
+              )
+            : null, // No icon when obsureText is false
+        hintText: widget.hintText,
       ),
     );
   }

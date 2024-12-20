@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../models/mess_recipesAndtiming.dart';
 import '../pages/authentication/models/user_model.dart';
@@ -65,5 +66,10 @@ class DatabaseService {
       print("Error retrieving recipes: $e");
       return []; // Return an empty list on error
     }
+  }
+
+  Future<UserModel> getUser({required String uid}) async {
+    final userSnapshot = await _userModel.doc(uid).get();
+    return userSnapshot.data()!;
   }
 }

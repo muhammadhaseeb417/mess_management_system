@@ -263,7 +263,8 @@ class _SignupPageState extends State<SignupPage> {
                                                   email: email!,
                                                   session: session!,
                                                   departemnt: dept!,
-                                                  rollNumber: rollNo!));
+                                                  rollNumber: rollNo!,
+                                                  mealAttendance: []));
                                       setState(() {
                                         isLoading = false;
                                       });

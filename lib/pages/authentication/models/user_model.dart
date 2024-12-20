@@ -9,6 +9,7 @@ class UserModel {
   String session;
   String departemnt;
   String rollNumber;
+  List<Map<String, dynamic>>? mealAttendance = []; // To track meal attendance
 
   UserModel({
     this.uid,
@@ -18,6 +19,7 @@ class UserModel {
     required this.session,
     required this.departemnt,
     required this.rollNumber,
+    this.mealAttendance,
   });
 
   Map<String, dynamic> toMap() {
@@ -29,6 +31,7 @@ class UserModel {
       'session': session,
       'departemnt': departemnt,
       'rollNumber': rollNumber,
+      'mealAttendance': mealAttendance,
     };
   }
 
@@ -41,6 +44,13 @@ class UserModel {
       session: map['session'] as String,
       departemnt: map['departemnt'] as String,
       rollNumber: map['rollNumber'] as String,
+      mealAttendance: map['mealAttendance'] != null
+          ? List<Map<String, dynamic>>.from(
+              (map['mealAttendance'] as List<dynamic>).map(
+                (x) => x as Map<String, dynamic>,
+              ),
+            )
+          : null,
     );
   }
 

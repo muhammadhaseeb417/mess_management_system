@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mess_management_system/pages/bottom_navigation/bottom_navigation.dart';
+import 'package:mess_management_system/pages/bottom_navigation_admin/bloc/bottom_nav_bar_bloc.dart';
+import 'package:mess_management_system/pages/bottom_navigation_admin/bottom_navigation_admin.dart';
 import 'package:mess_management_system/pages/signUp/signUp_provider.dart';
 import 'package:mess_management_system/pages/user_panel/user_dashboard.dart';
 import 'package:provider/provider.dart';
@@ -44,15 +46,27 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => BottomNavBarBloc(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => BottomNavBarBloc(),
+        ),
+        BlocProvider(
+          create: (context) => BottomNavBarAdminBloc(),
+        ),
+      ],
       child: GetMaterialApp(
         title: TTexts.appName,
         themeMode: ThemeMode.system,
         theme: TAppTheme.lightTheme,
         darkTheme: TAppTheme.darkTheme,
         debugShowCheckedModeBanner: false,
-        home: _authService.user != null ? BottomNavigation() : LoginPage(),
+        routes: {
+          "/": (context) => const BottomNavigation(),
+          "/login": (context) => const LoginPage(),
+          "/admin": (context) => const BottomNavigationAdmin(),
+        },
+        initialRoute: _authService.user != null ? "/" : "/login",
       ),
     );
   }
