@@ -70,23 +70,6 @@ class _FullScheduleState extends State<FullSchedule> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Schedule Page'),
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            color: TColors.white,
-          ),
-          onPressed: () {
-            Navigator.pop(context); // Navigate back
-          },
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {
-              print("Search icon pressed");
-            },
-          )
-        ],
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),

@@ -60,11 +60,22 @@ class DatabaseService {
   Future<List<MessRecipes>> getAllRecipes() async {
     try {
       final snapshot = await _messRecipes.get();
-      final recipes = snapshot.docs.map((doc) => doc.data()).toList();
-      return recipes;
+      final recipes = snapshot.docs
+          .map((doc) {
+            try {
+              return doc.data();
+            } catch (e) {
+              print("Error parsing document ${doc.id}: $e");
+              return null;
+            }
+          })
+          .where((recipe) => recipe != null)
+          .toList();
+
+      return recipes.whereType<MessRecipes>().toList();
     } catch (e) {
       print("Error retrieving recipes: $e");
-      return []; // Return an empty list on error
+      return [];
     }
   }
 

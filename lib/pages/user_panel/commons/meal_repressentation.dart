@@ -124,14 +124,17 @@ class _MealRepresentationState extends State<MealRepressentation> {
       padding: const EdgeInsets.all(TSizes.sm),
       decoration: BoxDecoration(
         color: TColors.white.withOpacity(0.6),
-        borderRadius: BorderRadius.circular(
-          TSizes.buttonRadius,
-        ),
+        borderRadius: BorderRadius.circular(TSizes.buttonRadius),
         image: DecorationImage(
-          image: upcomingMealRecipeImgUrl != null
-              ? NetworkImage(upcomingMealRecipeImgUrl!)
-              : AssetImage("assets/images/food/biryani.jpg"),
+          image: widget.upcomingRecipe?.imageURL != null
+              ? NetworkImage(widget.upcomingRecipe!.imageURL!) as ImageProvider
+              : const AssetImage("assets/images/food/biryani.jpg")
+                  as ImageProvider,
           fit: BoxFit.cover,
+          colorFilter: ColorFilter.mode(
+            Colors.black.withOpacity(0.2),
+            BlendMode.darken,
+          ),
         ),
       ),
       child: Column(
@@ -143,10 +146,11 @@ class _MealRepresentationState extends State<MealRepressentation> {
               Text(
                 widget.upcomingRecipe!.recipeName,
                 style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                  color: Colors.white,
                   shadows: [
                     Shadow(
                       color: Colors.black.withOpacity(0.5),
-                      offset: const Offset(5.0, 2.0),
+                      offset: const Offset(2.0, 2.0),
                       blurRadius: 4.0,
                     ),
                   ],
@@ -157,24 +161,29 @@ class _MealRepresentationState extends State<MealRepressentation> {
                   color: TColors.primary,
                   borderRadius: BorderRadius.circular(5),
                 ),
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                child: Text(widget.upcomingRecipe!.messTime.split(' ')[0]),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 10,
+                ),
+                child: Text(
+                  widget.upcomingRecipe!.messTime.split(' ')[0],
+                  style: const TextStyle(color: Colors.white),
+                ),
               ),
             ],
           ),
-          const SizedBox(
-            height: TSizes.lg,
-          ),
+          const SizedBox(height: TSizes.lg),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 'Time: $_timeUntilMeal',
                 style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                  color: Colors.white,
                   shadows: [
                     Shadow(
                       color: Colors.black.withOpacity(0.5),
-                      offset: const Offset(-2.0, 2.0),
+                      offset: const Offset(2.0, 2.0),
                       blurRadius: 4.0,
                     ),
                   ],

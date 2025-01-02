@@ -7,6 +7,7 @@ class MessRecipes {
   double recipePrice;
   String messDay;
   String messTime;
+  String? imageURL;
 
   MessRecipes({
     this.recipeId,
@@ -14,6 +15,7 @@ class MessRecipes {
     required this.recipePrice,
     required this.messDay,
     required this.messTime,
+    required this.imageURL,
   });
 
   Map<String, dynamic> toMap() {
@@ -23,6 +25,7 @@ class MessRecipes {
       'recipePrice': recipePrice,
       'messDay': messDay,
       'messTime': messTime,
+      'imageURL': imageURL,
     };
   }
 
@@ -33,6 +36,7 @@ class MessRecipes {
       recipePrice: map['recipePrice'] as double,
       messDay: map['messDay'] as String,
       messTime: map['messTime'] as String,
+      imageURL: map['imageURL'] as String,
     );
   }
 

@@ -168,8 +168,12 @@ class _AdminDashboardRachnaState extends State<AdminDashboardRachna> {
                 if (_messRecipeKey.currentState?.validate() ?? false) {
                   _messRecipeKey.currentState?.save();
 
-                  // Capture the generated recipe ID
-                  print("going to Running createMessRecipeInFirebase");
+                  String? recipeImageURL;
+
+                  if (selectedImage != null) {
+                    recipeImageURL = await _storageServive.uploadRecipeImage(
+                        file: selectedImage!, uid: DateTime.now().toString());
+                  }
                   String recipeId =
                       await _databaseService.createMessRecipeInFirebase(
                     messRecipes: MessRecipes(
@@ -177,14 +181,12 @@ class _AdminDashboardRachnaState extends State<AdminDashboardRachna> {
                       recipePrice: double.parse(recipePrice!),
                       messDay: selectedDay!,
                       messTime: selectedTime!,
-                      recipeId: "", // This field is updated in Firebase
+                      recipeId: "",
+                      imageURL:
+                          recipeImageURL, // This field is updated in Firebase
                     ),
                   );
 
-                  if (selectedImage != null) {
-                    await _storageServive.uploadRecipeImage(
-                        file: selectedImage!, uid: recipeId);
-                  }
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Row(
