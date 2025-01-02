@@ -83,4 +83,26 @@ class DatabaseService {
     final userSnapshot = await _userModel.doc(uid).get();
     return userSnapshot.data()!;
   }
+
+  Future<List<UserModel>> getAllStudents() async {
+    try {
+      final snapshot = await _userModel.get();
+      final students = snapshot.docs
+          .map((doc) {
+            try {
+              return doc.data();
+            } catch (e) {
+              print("Error parsing document \${doc.id}: \$e");
+              return null;
+            }
+          })
+          .where((student) => student != null)
+          .toList();
+
+      return students.whereType<UserModel>().toList();
+    } catch (e) {
+      print("Error retrieving students: \$e");
+      return [];
+    }
+  }
 }

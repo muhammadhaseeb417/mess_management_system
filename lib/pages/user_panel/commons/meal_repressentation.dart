@@ -10,8 +10,10 @@ import '../../../utils/helpers/helper_functions.dart';
 
 class MealRepressentation extends StatefulWidget {
   final MessRecipes? upcomingRecipe;
+  final bool seeScdedulePage;
 
-  const MealRepressentation({super.key, this.upcomingRecipe});
+  MealRepressentation(
+      {super.key, this.upcomingRecipe, this.seeScdedulePage = false});
 
   @override
   State<MealRepressentation> createState() => _MealRepresentationState();
@@ -177,7 +179,7 @@ class _MealRepresentationState extends State<MealRepressentation> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Time: $_timeUntilMeal',
+                widget.seeScdedulePage! ? "" : 'Time: $_timeUntilMeal',
                 style: Theme.of(context).textTheme.headlineSmall!.copyWith(
                   color: Colors.white,
                   shadows: [

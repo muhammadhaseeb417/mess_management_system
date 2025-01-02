@@ -69,9 +69,17 @@ class _SettingPageState extends State<SettingAdminPage> {
               "Log Out",
               onTap: () async {
                 Navigator.pushReplacementNamed(context, "/login");
-                Get.rawSnackbar(
-                  icon: Icon(Icons.info),
-                  message: "Admin Successfully Logged out",
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Row(
+                      children: [
+                        const Icon(Icons.info, color: Colors.white),
+                        const SizedBox(width: 8),
+                        Expanded(child: Text("Admin Successfully Logged out")),
+                      ],
+                    ),
+                    behavior: SnackBarBehavior.floating,
+                  ),
                 );
               },
             ),

@@ -126,6 +126,7 @@ class _FullScheduleState extends State<FullSchedule> {
                               ),
                               child: MealRepressentation(
                                 upcomingRecipe: _filteredRecipes[index],
+                                seeScdedulePage: true,
                               ),
                             );
                           },

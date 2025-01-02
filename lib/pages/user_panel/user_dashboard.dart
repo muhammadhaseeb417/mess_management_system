@@ -4,7 +4,7 @@ import 'package:lottie/lottie.dart';
 import 'package:mess_management_system/pages/Full%20Schedule/full_schedule.dart';
 import 'package:mess_management_system/pages/bill/bill_screen.dart';
 import 'package:mess_management_system/pages/current%20bill/current_bill_screen.dart';
-import 'package:mess_management_system/pages/view%20attendence/view_attendence_screen.dart';
+import 'package:mess_management_system/pages/view%20students/view_students.dart';
 import 'package:mess_management_system/pages/view%20cut%20attendence/view_cut_attendence.dart';
 
 import '../../models/mess_recipesAndtiming.dart';
@@ -191,35 +191,6 @@ class _UserDashboardState extends State<UserDashboard> {
                         ),
                   ),
                 ),
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  child: Padding(
-                    padding: EdgeInsets.all(3.0),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(
-                          builder: (context) {
-                            return const FullSchedule();
-                          },
-                        ));
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: TColors.black,
-                        side: const BorderSide(color: TColors.black),
-                        elevation: 0,
-                      ),
-                      child: Padding(
-                        padding:
-                            const EdgeInsets.symmetric(horizontal: TSizes.xs),
-                        child: Text(
-                          'See Schedule',
-                          style: Theme.of(context).textTheme.labelSmall,
-                        ),
-                      ),
-                    ),
-                  ),
-                )
               ],
             ),
             const SizedBox(
@@ -250,7 +221,19 @@ class _UserDashboardState extends State<UserDashboard> {
             const SizedBox(
               height: TSizes.spaceBtwItems,
             ),
-            _infobuttons(context),
+            SizedBox(
+              width: double.maxFinite,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (context) {
+                      return const FullSchedule();
+                    },
+                  ));
+                },
+                child: Text("See Full Schedule"),
+              ),
+            ),
             const SizedBox(
               height: TSizes.spaceBtwItems,
             ),
@@ -304,58 +287,6 @@ class _UserDashboardState extends State<UserDashboard> {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _infobuttons(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          children: [
-            Expanded(
-              child: CustomInfoButton(
-                btnText: "View Current Bill",
-                backgroundColor: Colors.green,
-                pageCallback: () => CurrentBillScreen(),
-              ),
-            ),
-            SizedBox(
-              width: TSizes.lg,
-            ),
-            Expanded(
-              child: CustomInfoButton(
-                btnText: "View Attendence",
-                backgroundColor: Color.fromARGB(255, 164, 148, 11),
-                pageCallback: () => ViewAttendenceScreen(),
-              ),
-            ),
-          ],
-        ),
-        SizedBox(
-          height: TSizes.spaceBtwItems,
-        ),
-        Row(
-          children: [
-            Expanded(
-              child: CustomInfoButton(
-                btnText: "Bills",
-                backgroundColor: Colors.blue,
-                pageCallback: () => BillScreen(),
-              ),
-            ),
-            SizedBox(
-              width: TSizes.lg,
-            ),
-            Expanded(
-              child: CustomInfoButton(
-                btnText: "View Cut Attendence",
-                backgroundColor: Colors.red,
-                pageCallback: () => ViewCutAttendence(),
-              ),
-            ),
-          ],
-        ),
-      ],
     );
   }
 }

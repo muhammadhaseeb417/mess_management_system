@@ -18,7 +18,7 @@ class BottomNavBarAdminBloc
       : super(BottomNavBarAdminState(
           index: 0,
           screens: [
-            const FullSchedule(),
+            const AdminDashboard(),
             const AdminDashboardRachna(),
             const SettingAdminPage(),
           ],
