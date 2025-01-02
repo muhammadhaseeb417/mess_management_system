@@ -5,6 +5,7 @@ import 'package:mess_management_system/pages/setting/setting_admin.dart';
 import 'package:mess_management_system/pages/setting/setting_page.dart';
 import 'package:mess_management_system/pages/user%20mess%20preperence/user_mess_preference.dart';
 
+import '../../Full Schedule/full_schedule.dart';
 import '../../admin_panel/admin_dashboard_rachna.dart';
 import '../../user_panel/user_dashboard.dart';
 
@@ -17,7 +18,7 @@ class BottomNavBarAdminBloc
       : super(BottomNavBarAdminState(
           index: 0,
           screens: [
-            const AdminDashboard(),
+            const FullSchedule(),
             const AdminDashboardRachna(),
             const SettingAdminPage(),
           ],

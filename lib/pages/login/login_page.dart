@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mess_management_system/utils/constants/reg_exp.dart';
 
@@ -23,6 +22,10 @@ class _LoginPageState extends State<LoginPage> {
   late bool isDark;
   final GetIt _getIt = GetIt.instance;
   late AuthService _authService;
+  final GlobalKey<FormState> _loginKey = GlobalKey<FormState>();
+  String? _email, _password;
+  bool _rememberMe = false;
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -30,9 +33,24 @@ class _LoginPageState extends State<LoginPage> {
     _authService = _getIt.get<AuthService>();
   }
 
+  void _showSnackBar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            const Icon(Icons.info, color: Colors.white),
+            const SizedBox(width: 8),
+            Text(message),
+          ],
+        ),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    isDark = THelperFunctions.isDarkMode(context); // Initialize here
+    isDark = THelperFunctions.isDarkMode(context);
     return Scaffold(
       body: _buildUI(context),
     );
@@ -42,14 +60,14 @@ class _LoginPageState extends State<LoginPage> {
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(
-            vertical: TSizes.defaultSpace * 3, horizontal: TSizes.defaultSpace),
+          vertical: TSizes.defaultSpace * 3,
+          horizontal: TSizes.defaultSpace,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _loginHeader(context),
-            const SizedBox(
-              height: TSizes.xl,
-            ),
+            const SizedBox(height: TSizes.xl),
             _loginForm(context),
           ],
         ),
@@ -61,22 +79,14 @@ class _LoginPageState extends State<LoginPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(
-          height: TSizes.appBarHeight,
-        ),
-        Image.asset(
-          isDark ? TImages.darkAppLogo : TImages.lightAppLogo,
-        ),
-        const SizedBox(
-          height: TSizes.defaultSpace,
-        ),
+        const SizedBox(height: TSizes.appBarHeight),
+        Image.asset(isDark ? TImages.darkAppLogo : TImages.lightAppLogo),
+        const SizedBox(height: TSizes.defaultSpace),
         Text(
           TTexts.loginTitle,
           style: Theme.of(context).textTheme.headlineMedium,
         ),
-        const SizedBox(
-          height: TSizes.sm,
-        ),
+        const SizedBox(height: TSizes.sm),
         Text(
           TTexts.loginSubTitle,
           style: Theme.of(context).textTheme.bodyLarge,
@@ -86,29 +96,23 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _loginForm(BuildContext context) {
-    GlobalKey<FormState> _loginKey = GlobalKey<FormState>();
-    String? email, password;
-    bool hidePass = true;
-
     return Form(
       key: _loginKey,
       child: Column(
         children: [
           CustomTextField(
             hintText: "E-Mail",
-            prefixIcon: Icon(Icons.email),
+            prefixIcon: const Icon(Icons.email),
             validateRegExp: EMAIL_VALIDATION_REGEX,
-            onSaved: (p0) => email = p0,
+            onSaved: (value) => _email = value,
           ),
-          const SizedBox(
-            height: TSizes.lg,
-          ),
+          const SizedBox(height: TSizes.lg),
           CustomTextField(
             hintText: "Password",
-            prefixIcon: Icon(Icons.password),
+            prefixIcon: const Icon(Icons.password),
             obsureText: true,
             validateRegExp: PASSWORD_VALIDATION_REGEX,
-            onSaved: (p0) => password = p0,
+            onSaved: (value) => _password = value,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -116,8 +120,10 @@ class _LoginPageState extends State<LoginPage> {
               Row(
                 children: [
                   Checkbox(
-                    value: false,
-                    onChanged: (value) {},
+                    value: _rememberMe,
+                    onChanged: (value) {
+                      setState(() => _rememberMe = value ?? false);
+                    },
                   ),
                   const Text(TTexts.rememberMe),
                 ],
@@ -125,71 +131,77 @@ class _LoginPageState extends State<LoginPage> {
               const Text(TTexts.forgetPassword),
             ],
           ),
-          const SizedBox(
-            height: TSizes.xl * 3,
-          ),
+          const SizedBox(height: TSizes.xl * 3),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () async {
-                try {
-                  if (email == "admin@admin.com" && password == "Admin@123") {
-                    Navigator.pushReplacementNamed(context, "/admin");
-                  } else {
-                    if (_loginKey.currentState?.validate() ?? false) {
-                      _loginKey.currentState?.save();
-                      bool result = await _authService.login(email!, password!);
-                      if (result) {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return const BottomNavigation();
-                            },
-                          ),
-                        );
-                        Get.rawSnackbar(
-                          icon: Icon(Icons.info),
-                          message: "User Successfully Logged In",
-                        );
-                      } else {
-                        Get.rawSnackbar(
-                          icon: Icon(Icons.info),
-                          message: "Please try again.",
-                        );
+              onPressed: _isLoading
+                  ? null
+                  : () async {
+                      setState(() => _isLoading = true);
+                      try {
+                        if (_loginKey.currentState?.validate() ?? false) {
+                          _loginKey.currentState?.save();
+
+                          if (_email == "admin@admin.com" &&
+                              _password == "Admin@123") {
+                            Navigator.pushReplacementNamed(context, "/admin");
+                            _showSnackBar(
+                                context, "Admin Successfully Logged In");
+                            return;
+                          }
+
+                          bool result =
+                              await _authService.login(_email!, _password!);
+                          if (result) {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const BottomNavigation(),
+                              ),
+                            );
+                            _showSnackBar(
+                                context, "User Successfully Logged In");
+                          } else {
+                            _showSnackBar(context, "Please try again.");
+                          }
+                        } else {
+                          _showSnackBar(context, "Please try again.");
+                        }
+                      } catch (e) {
+                        _showSnackBar(
+                            context, "An error occurred. Please try again.");
+                        print(e);
+                      } finally {
+                        if (mounted) {
+                          setState(() => _isLoading = false);
+                        }
                       }
-                    } else {
-                      Get.rawSnackbar(
-                        icon: Icon(Icons.info),
-                        message: "Please try again.",
-                      );
-                    }
-                  }
-                } catch (e) {
-                  print(e);
-                }
-              },
-              child: const Text(
-                TTexts.logIn,
-              ),
+                    },
+              child: _isLoading
+                  ? const SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : const Text(TTexts.logIn),
             ),
           ),
-          const SizedBox(
-            height: TSizes.sm,
-          ),
+          const SizedBox(height: TSizes.sm),
           SizedBox(
             width: double.infinity,
             child: OutlinedButton(
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(
-                  builder: (context) {
-                    return const SignupPage();
-                  },
-                ));
-              },
-              child: const Text(
-                TTexts.createAccount,
-              ),
+              onPressed: _isLoading
+                  ? null
+                  : () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SignupPage(),
+                        ),
+                      );
+                    },
+              child: const Text(TTexts.createAccount),
             ),
           ),
         ],

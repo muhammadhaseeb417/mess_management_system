@@ -4,6 +4,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
+import 'package:mess_management_system/utils/constants/reg_exp.dart';
 
 import '../../models/mess_recipesAndtiming.dart';
 import '../../services/database_service.dart';
@@ -62,7 +63,7 @@ class _AdminDashboardRachnaState extends State<AdminDashboardRachna> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Admin Dashboard'),
+        title: const Text('Add Meals'),
       ),
       body: isSubmittingInfo
           ? const Center(
@@ -142,7 +143,7 @@ class _AdminDashboardRachnaState extends State<AdminDashboardRachna> {
             hintText: "Recipe Name",
             prefixIcon: Icon(Icons.food_bank_outlined),
             onSaved: (value) => recipeName = value,
-            validateRegExp: null,
+            validateRegExp: STRING_VALIDATION_REGEX,
           ),
           const SizedBox(
             height: TSizes.spaceBtwItems,
@@ -151,6 +152,7 @@ class _AdminDashboardRachnaState extends State<AdminDashboardRachna> {
             hintText: "Recipe Price",
             prefixIcon: const Icon(Icons.food_bank_outlined),
             onSaved: (value) => recipePrice = value,
+            validateRegExp: NUMBER_VALIDATION_REGEX,
           ),
           const SizedBox(
             height: TSizes.spaceBtwItems,
@@ -183,12 +185,24 @@ class _AdminDashboardRachnaState extends State<AdminDashboardRachna> {
                     await _storageServive.uploadRecipeImage(
                         file: selectedImage!, uid: recipeId);
                   }
-                  Get.rawSnackbar(
-                    duration: Duration(seconds: 3),
-                    icon: Icon(Icons.info_outline),
-                    message: "Recipe has been successfully created",
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Row(
+                        children: [
+                          const Icon(Icons.info, color: Colors.white),
+                          const SizedBox(width: 8),
+                          Expanded(
+                              child:
+                                  Text("Recipe has been successfully created")),
+                        ],
+                      ),
+                      behavior: SnackBarBehavior.floating,
+                    ),
                   );
+
                   _messRecipeKey.currentState?.reset();
+
+                  selectedImage = null;
 
                   selectedDay = null;
                   selectedTime = null;

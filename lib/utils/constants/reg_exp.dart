@@ -1,5 +1,9 @@
 // validation_regex.dart
 
+RegExp STRING_VALIDATION_REGEX = RegExp(r"^[a-zA-Z\s]+$");
+
+RegExp NUMBER_VALIDATION_REGEX = RegExp(r"^\d+(\.\d+)?$");
+
 RegExp EMAIL_VALIDATION_REGEX = RegExp(r"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$");
 
 RegExp PASSWORD_VALIDATION_REGEX =
